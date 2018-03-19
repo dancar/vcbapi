@@ -16,6 +16,11 @@ class BookmarksController < ApplicationController
     render json: @bookmarks, status: :ok
   end
 
+  def update
+    @bookmark.update(bookmark_params)
+    head :no_content
+  end
+
   private
 
   def set_bookmark_item

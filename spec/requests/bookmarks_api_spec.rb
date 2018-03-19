@@ -115,4 +115,26 @@ describe "Bookmarks API" , type: :request do
     expect(json.length).to eq(0)
 
   end
+
+  it "updates correctly" do
+    params = {
+      bookmark: {
+        url: "hello.com/bla?s=param",
+        shortening: "go.to/1",
+        title: "first title",
+      }
+    }
+    post "/bookmarks", params: params
+    expect(response).to have_http_status(:created)
+
+    id = json["id"]
+    get "/bookmarks/#{id}"
+    expect(json["title"]).to eq("first title")
+
+    put "/bookmarks/#{id}", params: {bookmark: {title: "second title"}}
+    expect(response).to have_http_status(:no_content)
+
+    get "/bookmarks/#{id}"
+    expect(json["title"]).to eq("second title")
+  end
 end
