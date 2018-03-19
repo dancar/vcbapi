@@ -1,9 +1,8 @@
 require 'rails_helper'
 
 describe "Bookmarks API" , type: :request do
-  it "creates a bookmark correctly" do
+  it "can create and retrieve a bookmark" do
     params = {
-      format: :json,
       bookmark: {
         url: "hello.com/bla?s=param",
         shortening: "go.to/1",
@@ -25,5 +24,41 @@ describe "Bookmarks API" , type: :request do
     expect(json[:shortening]).to eq("go.to/1")
 
     # TODO: misc bad requests tests
+  end
+
+  it "creates the same Site for similar bookmarks" do
+    params1 = {
+      bookmark: {
+        url: "goodbye.com/bla?s=param",
+        title: "title",
+      }
+    }
+
+    params2 = {
+      bookmark: {
+        url: "https://goodbye.com/wha",
+        title: "title",
+      }
+    }
+
+    params3 = {
+      bookmark: {
+        url: "https://different.com/wha",
+        title: "title",
+      }
+    }
+
+    post "/bookmarks", params: params1
+    expect(response).to have_http_status(:created)
+    site_id = json[:site_id]
+    expect(site_id).to be_instance_of Integer
+
+    post "/bookmarks", params: params2
+    expect(response).to have_http_status(:created)
+    expect(json[:site_id]).to eq(site_id)
+
+    post "/bookmarks", params: params3
+    expect(response).to have_http_status(:created)
+    expect(json[:site_id]).not_to eq(site_id)
   end
 end
