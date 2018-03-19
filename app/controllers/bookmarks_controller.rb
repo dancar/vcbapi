@@ -9,6 +9,13 @@ class BookmarksController < ApplicationController
   def show
     render json: @bookmark
   end
+
+  def search
+    query = params[:q] # TODO: check query?
+    @bookmarks = Bookmark.where("url like ?", "%#{query}%")
+    render json: @bookmarks, status: :ok
+  end
+
   private
 
   def set_bookmark_item
@@ -16,15 +23,7 @@ class BookmarksController < ApplicationController
   end
 
   def bookmark_params
-    bookmark = params[:bookmark]
-    uri = URI(bookmark[:url])
-    if uri.scheme == nil
-      uri = URI("notimportant://" + bookmark[:url])
-    end
-    bookmark[:path] = "#{uri.path}?#{uri.query}"
-    site = Site.find_or_create_by(hostname: uri.host) # TODO: handle race condition?
-    bookmark[:site_id] = site.id
-    params.require(:bookmark).permit(:title, :site_id, :path, :shortening)
-    # TODO: maybe check if site should be removed
+    params.require(:bookmark).permit(:title, :url, :shortening)
   end
+
 end

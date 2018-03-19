@@ -10,20 +10,19 @@ describe "Bookmarks API" , type: :request do
       }
     }
     post "/bookmarks", params: params
-    puts('<-DANDEBUG-> bookmarks_api_spec.rb\\ 14: json:', json)
     expect(response).to have_http_status(:created)
-    expect(json[:title]).to eq("awesome title")
-    expect(json[:bookmark_url]).to eq('hello.com/bla?s=param')
-    expect(json[:shortening]).to eq("go.to/1")
-    id = json[:id]
+    expect(json["title"]).to eq("awesome title")
+    expect(json["url"]).to eq('hello.com/bla?s=param')
+    expect(json["shortening"]).to eq("go.to/1")
+    id = json["id"]
 
     get "/bookmarks/#{id}"
     expect(response).to have_http_status(:ok)
-    expect(json[:title]).to eq("awesome title")
-    expect(json[:bookmark_url]).to eq('hello.com/bla?s=param')
-    expect(json[:shortening]).to eq("go.to/1")
+    expect(json["title"]).to eq("awesome title")
+    expect(json["url"]).to eq('hello.com/bla?s=param')
+    expect(json["shortening"]).to eq("go.to/1")
 
-    # TODO: misc bad requests tests
+    # TODO: misc bad requests test
   end
 
   it "creates the same Site for similar bookmarks" do
@@ -50,15 +49,70 @@ describe "Bookmarks API" , type: :request do
 
     post "/bookmarks", params: params1
     expect(response).to have_http_status(:created)
-    site_id = json[:site_id]
+    site_id = json["site_id"]
     expect(site_id).to be_instance_of Integer
 
     post "/bookmarks", params: params2
     expect(response).to have_http_status(:created)
-    expect(json[:site_id]).to eq(site_id)
+    expect(json["site_id"]).to eq(site_id)
 
     post "/bookmarks", params: params3
     expect(response).to have_http_status(:created)
-    expect(json[:site_id]).not_to eq(site_id)
+    expect(json["site_id"]).not_to eq(site_id)
+  end
+
+  it "searches correctly" do
+    # TODO: dry params
+    params1 = {
+      bookmark: {
+        url: "goodbye.com/bla?s=param",
+        title: "title",
+      }
+    }
+
+    params2 = {
+      bookmark: {
+        url: "https://goodbye.com/wha",
+        title: "title",
+      }
+    }
+
+    params3 = {
+      bookmark: {
+        url: "https://different.com/wha",
+        title: "title",
+      }
+    }
+
+    post "/bookmarks", params: params1
+    post "/bookmarks", params: params2
+    post "/bookmarks", params: params3
+
+    get "/bookmarks/search?q=wha"
+    expect(response).to have_http_status(:ok)
+    expect(json).to be_instance_of Array
+    expect(json.length).to eq(2)
+
+    get "/bookmarks/search?q=goodbye"
+    expect(response).to have_http_status(:ok)
+    expect(json).to be_instance_of Array
+    expect(json.length).to eq(2)
+
+    get "/bookmarks/search?q=.com"
+    expect(response).to have_http_status(:ok)
+    expect(json).to be_instance_of Array
+    expect(json.length).to eq(3)
+
+    get "/bookmarks/search?q=different"
+    expect(response).to have_http_status(:ok)
+    expect(json).to be_instance_of Array
+    expect(json.length).to eq(1)
+    expect(json[0]["url"]).to eq("https://different.com/wha")
+
+    get "/bookmarks/search?q=ohno"
+    expect(response).to have_http_status(:ok)
+    expect(json).to be_instance_of Array
+    expect(json.length).to eq(0)
+
   end
 end

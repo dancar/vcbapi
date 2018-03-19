@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 20180319174144) do
 
   create_table "bookmarks", force: :cascade do |t|
-    t.string "path"
+    t.string "url"
     t.integer "site_id"
     t.string "title"
     t.string "shortening"

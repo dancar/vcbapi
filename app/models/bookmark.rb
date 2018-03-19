@@ -1,16 +1,15 @@
 class Bookmark < ApplicationRecord
   belongs_to :site
-  attr_reader :bookmark_url
-  def as_json(opts = {})
-    super(opts).merge(
-      {
-        bookmark_url: self.bookmark_url
-      }
-    )
+  before_validation :register_site
 
-  end
+  private
+  def register_site
+    uri = URI(self.url)
+    if uri.scheme == nil
+      uri = URI("notimportant://" + self.url)
+    end
 
-  def bookmark_url
-    self.site.hostname + self.path
+    self.site = Site.find_or_create_by(hostname: uri.host) # TODO: handle race condition?
+    # TODO: maybe check if site should be removed (in case validation failed)
   end
 end
