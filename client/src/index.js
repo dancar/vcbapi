@@ -8,7 +8,6 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 
 import * as reducers from './store/reducers'
-console.log('<-DANDEBUG-> index.js\\ 11: reducers:', reducers);
 const store = createStore(combineReducers(reducers), applyMiddleware(thunk))
 
 ReactDOM.render((

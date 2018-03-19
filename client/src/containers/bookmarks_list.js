@@ -24,19 +24,30 @@ class BookmarksList extends React.Component {
   }
 
   renderBookmark(id, {title, url, shortening}) {
-    console.log('<-DANDEBUG-> bookmarks_list.js\\ 27: id, title, url, shortening:', id, title, url, shortening);
     return (
       <div key={id} className="bookmark-row">
-        {title}
-        {url}
-        {shortening}
+        <div>
+          {title}
+        </div>
+
+        <div>
+          <a href={url} target="_new">
+            {url}
+          </a>
+        </div>
+
+        <div>
+          <a href={shortening} target="_new">
+          {shortening}
+          </a>
+        </div>
+
       </div>
     )
   }
 }
 
 function mapStateToProps(state) {
-  console.log('<-DANDEBUG-> bookmarks_list.js\\ 38: state:', state);
   const bookmarks = state.bookmarks
 
   return {bookmarks}

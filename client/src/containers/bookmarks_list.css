@@ -1,16 +1,17 @@
 .bookmarks-list {
   margin: auto;
   display: table;
-  background: navy;
+  text-align: center;
 }
 
-.bookmark-list .bookmark-row {
+.bookmarks-list .bookmark-row {
   display: table-row;
 }
 
-.bookmark-list .bookmark-row > div {
+.bookmarks-list .bookmark-row > div {
   display: table-cell;
-  background: white;
+  background: silver;
   margin: 5px;
+  padding: 5px;
   border: 1px solid gray;
 }
