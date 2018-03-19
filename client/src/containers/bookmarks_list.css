@@ -1,0 +1,16 @@
+.bookmarks-list {
+  margin: auto;
+  display: table;
+  background: navy;
+}
+
+.bookmark-list .bookmark-row {
+  display: table-row;
+}
+
+.bookmark-list .bookmark-row > div {
+  display: table-cell;
+  background: white;
+  margin: 5px;
+  border: 1px solid gray;
+}

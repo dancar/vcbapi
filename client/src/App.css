@@ -1,0 +1,10 @@
+.App {
+  text-align: center;
+}
+
+.bookmark-form input {
+  margin: 5px 20px;
+}
+.bookmark-form-field {
+  display: block;
+}
