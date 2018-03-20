@@ -4,11 +4,38 @@ import { FormControl, Button, ButtonGroup } from 'react-bootstrap'
 export default class BookmarkListItem extends React.Component {
   constructor (props) {
     super(props)
-    this.state = Object.assign({
+    const attributes = Object.assign({
       title: "",
       url: "",
       shortening: ""
-    }, this.props)
+    }, this.props.initialAttributes)
+    this.state = {attributes}
+  }
+
+  handleChange (e) {
+    this.setState({
+      attributes: Object.assign(
+        {}, this.state.attributes,
+        {
+          [e.target.name]: e.target.value
+        })
+    })
+  }
+
+  handleSave () {
+    this.props.onSave(this.state.attributes)
+  }
+
+  handleCreate () {
+    this.props.onCreate(this.state.attributes)
+    this.reset()
+  }
+
+  reset() {
+    const attributes = {}
+    Object.keys(this.state.attributes).forEach(
+      name => attributes[name] = "" )
+    this.setState({attributes})
   }
 
   textAttribute(name, link) {
@@ -18,17 +45,19 @@ export default class BookmarkListItem extends React.Component {
           : {
             cursor: "default", background: "none", border: "none", boxShadow: "none"
           }
-    const value = this.state[name]
+    const value = this.state.attributes[name]
     let control = (
         <FormControl
           style={style}
           disabled={!editable}
           type="text"
-          defaultValue={value}
+          value={value}
           name={name}
+          onChange={this.handleChange.bind(this)}
           />
     )
     if (!editable && link) {
+      style.cursor = "pointer"
       control = (
         <a href={value} target="_new">
           {control}
@@ -47,7 +76,7 @@ export default class BookmarkListItem extends React.Component {
       return (
       <ButtonGroup>
         <Button bsSize="xsmall" bsStyle="default" onClick={this.props.onCancelEdit} >Cancel</Button>
-        <Button bsSize="xsmall" bsStyle="primary"  type="submit">Save</Button>
+        <Button bsSize="xsmall" bsStyle="primary" onClick={this.handleSave.bind(this)} >Save</Button>
         <Button bsSize="xsmall" bsStyle="danger" onClick={this.props.onDelete} >Delete</Button>
       </ButtonGroup>
       )
@@ -55,8 +84,8 @@ export default class BookmarkListItem extends React.Component {
     if (this.props.creator) {
       return (
       <ButtonGroup>
-        <Button bsSize="xsmall" bsStyle="primary" type="submit">Submit</Button>
-        <Button bsSize="xsmall" bsStyle="default" type="reset" >Reset</Button>
+        <Button bsSize="xsmall" bsStyle="primary" onClick={this.handleCreate.bind(this)}>Submit</Button>
+        <Button bsSize="xsmall" bsStyle="default" onClick={this.reset.bind(this)}>Reset</Button>
       </ButtonGroup>
       )
     }
@@ -65,19 +94,9 @@ export default class BookmarkListItem extends React.Component {
     )
   }
 
-  handleSubmit (e) {
-    e.preventDefault()
-    const attributeNames = ["title", "url", "shortening"]
-    const attributes = {}
-    attributeNames.forEach(
-      name => attributes[name] = e.target[name].value
-    )
-    this.setState(attributes)
-    this.props.onSubmit(attributes)
-  }
   render () {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)} className="bookmark-row">
+      <form className="bookmark-row">
           {this.textAttribute("title")}
           {this.textAttribute("url", true)}
           {this.textAttribute("shortening", true)}

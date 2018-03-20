@@ -46,7 +46,7 @@ class BookmarksList extends React.Component {
       <div className="bookmarks-list">
         <BookmarkListItem
           creator
-          onSubmit={this.handleCreate.bind(this)}
+          onCreate={this.handleCreate.bind(this)}
           />
         { Object.keys(this.props.bookmarks).map((id) => this.renderBookmark(id, this.props.bookmarks[id])) }
       </div>
@@ -57,18 +57,16 @@ class BookmarksList extends React.Component {
     return "Loading..." // TODO: something else?
   }
 
-  renderBookmark(id, {title, url, shortening}) {
+  renderBookmark(id, attributes) {
     return (
       <BookmarkListItem
         key={id}
+        initialAttributes={attributes}
         id={id}
-        title={title}
-        url={url}
-        shortening={shortening}
         onCancelEdit={() => this.setState({editable: null})}
         onEdit={() => this.setState({editable: id})}
         onDelete={() => this.handleDelete(id)}
-        onSubmit={this.createSaveHandler(id)}
+        onSave={this.createSaveHandler(id)}
         editable={this.state.editable === id}/>
     )
   }
