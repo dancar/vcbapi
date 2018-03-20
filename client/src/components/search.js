@@ -28,6 +28,7 @@ export default class Search extends React.Component {
           <FormControl
             type="text"
             placeholder="Query"
+            value={this.state.query}
             onChange={(e) => this.setState({query: e.target.value})}
             />
         </FormGroup>{' '}

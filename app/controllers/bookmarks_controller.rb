@@ -12,7 +12,7 @@ class BookmarksController < ApplicationController
 
   def search
     query = params[:q] # TODO: check query?
-    @bookmarks = Bookmark.where("url like ?", "%#{query}%")
+    @bookmarks = Bookmark.where("url LIKE :search OR title LIKE :search OR shortening LIKE :search", search: "%#{query}%")
     render json: @bookmarks, status: :ok
   end
 
