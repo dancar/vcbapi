@@ -32,7 +32,9 @@ export default class Search extends React.Component {
             onChange={(e) => this.setState({query: e.target.value})}
             />
         </FormGroup>{' '}
-        <Button onClick={this.handleSearch.bind(this)} type="submit">Search</Button>{' '}
+        <Button
+          disabled={this.state.query === ""}
+          onClick={this.handleSearch.bind(this)} type="submit">Search</Button>{' '}
         <Button onClick={this.handleReset.bind(this)}>Reset</Button>
       </Form>
     )
