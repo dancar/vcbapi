@@ -18,3 +18,7 @@ bundle exec rails db:migrate
 ## Run
 
 `bundle exec rails s`
+
+## Test
+
+`bundle exec rspec`
