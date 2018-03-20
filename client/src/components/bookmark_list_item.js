@@ -85,10 +85,10 @@ export default class BookmarkListItem extends React.Component {
     const style = editable
           ? {}
           : {
-            cursor: "default", background: "none", border: "none", boxShadow: "none"
+            cursor: "default", color: "midnightBlue", background: "none", border: "none", boxShadow: "none"
           }
     let value = this.state.attributes[name]
-    const displayName = DISPLAY_NAMES[name]
+    const displayName = this.editable && DISPLAY_NAMES[name]
     let control = (
         <FormControl
           style={style}
