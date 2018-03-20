@@ -4,7 +4,7 @@ describe "Bookmarks API" , type: :request do
   it "can create and retrieve a bookmark" do
     params = {
       bookmark: {
-        url: "hello.com/bla?s=param",
+        url: "http://hello.com/bla?s=param",
         shortening: "go.to/1",
         title: "awesome title",
       }
@@ -12,14 +12,14 @@ describe "Bookmarks API" , type: :request do
     post "/bookmarks", params: params
     expect(response).to have_http_status(:created)
     expect(json["title"]).to eq("awesome title")
-    expect(json["url"]).to eq('hello.com/bla?s=param')
+    expect(json["url"]).to eq('http://hello.com/bla?s=param')
     expect(json["shortening"]).to eq("go.to/1")
     id = json["id"]
 
     get "/bookmarks/#{id}"
     expect(response).to have_http_status(:ok)
     expect(json["title"]).to eq("awesome title")
-    expect(json["url"]).to eq('hello.com/bla?s=param')
+    expect(json["url"]).to eq('http://hello.com/bla?s=param')
     expect(json["shortening"]).to eq("go.to/1")
 
     # TODO: misc bad requests test
@@ -65,7 +65,7 @@ describe "Bookmarks API" , type: :request do
     # TODO: dry params
     params1 = {
       bookmark: {
-        url: "goodbye.com/bla?s=param",
+        url: "http://goodbye.com/bla?s=param",
         title: "title",
       }
     }
@@ -119,7 +119,7 @@ describe "Bookmarks API" , type: :request do
   it "updates correctly" do
     params = {
       bookmark: {
-        url: "hello.com/bla?s=param",
+        url: "http://hello.com/bla?s=param",
         shortening: "go.to/1",
         title: "first title",
       }
