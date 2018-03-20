@@ -7,6 +7,7 @@ end
 
 
 gem "validate_url"
+gem "factory_bot_rails"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.5'
