@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+
 describe "Bookmarks API" , type: :request do
   it "can create and retrieve a bookmark" do
     params = {
@@ -136,5 +137,34 @@ describe "Bookmarks API" , type: :request do
 
     get "/bookmarks/#{id}"
     expect(json["title"]).to eq("second title")
+  end
+
+  it "deletes correctly" do
+    #TODO...
+  end
+
+  it "does not create the same URL twice" do
+    params1 = {
+      bookmark: {
+        url: "http://hello.com",
+        shortening: "http://go.to/1",
+        title: "first title",
+      }
+    }
+
+    params2 = {
+      bookmark: {
+        url: "http://hello.com",
+        shortening: "http://go.to/1",
+        title: "first title",
+      }
+    }
+
+    post "/bookmarks", params: params1
+    expect(response).to have_http_status(:created)
+
+    post "/bookmarks", params: params2
+    expect(response).to have_http_status(:conflict)
+
   end
 end

@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20180319174144) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["site_id"], name: "index_bookmarks_on_site_id"
+    t.index ["url"], name: "index_bookmarks_on_url", unique: true
   end
 
   create_table "sites", force: :cascade do |t|

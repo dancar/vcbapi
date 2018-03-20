@@ -1,19 +1,19 @@
 class BookmarksController < ApplicationController
-  before_action :set_bookmark_item
+  before_action :set_bookmark_item, only: [:show, :update, :destroy]
 
   def create
     @bookmark = Bookmark.create!(bookmark_params)
-    render json: @bookmark, status: :created
+    json_response @bookmark, :created
   end
 
   def show
-    render json: @bookmark
+    json_response @bookmark
   end
 
   def search
     query = params[:q] # TODO: check query?
     @bookmarks = Bookmark.where("url LIKE :search OR title LIKE :search OR shortening LIKE :search", search: "%#{query}%")
-    render json: @bookmarks, status: :ok
+    json_response @bookmarks
   end
 
   def update
@@ -22,7 +22,8 @@ class BookmarksController < ApplicationController
   end
 
   def index
-    render json: Bookmark.all, status: :ok # TODO: pagination?
+    # TODO: pagination?
+    json_response Bookmark.all
   end
 
   def destroy
