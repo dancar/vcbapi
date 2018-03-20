@@ -2,25 +2,24 @@ require 'rails_helper'
 
 describe "Bookmarks API" , type: :request do
   it "can create and retrieve a bookmark" do
-    params = {
-      bookmark: {
-        url: "http://hello.com/bla?s=param",
-        shortening: "http://go.to/1",
-        title: "awesome title",
-      }
-    }
+    params = build(:bookmark_request_params)
+    attributes = params[:bookmark]
     post "/bookmarks", params: params
-    expect(response).to have_http_status(:created)
-    expect(json["title"]).to eq("awesome title")
-    expect(json["url"]).to eq('http://hello.com/bla?s=param')
-    expect(json["shortening"]).to eq("http://go.to/1")
-    id = json["id"]
 
+    # Check that the 201 also returned the body:
+    expect(response).to have_http_status(:created)
+    expect(json.symbolize_keys).to include(attributes)
+    id = json["id"]
+    bookmark = Bookmark.find(id)
+    expect(bookmark.title).to eq(attributes[:title])
+    expect(bookmark.url).to eq(attributes[:url])
+    expect(bookmark.shortening).to eq(attributes[:shortening])
+
+    # Check that the newly created bookmark actually exists:
+    id = json["id"]
     get "/bookmarks/#{id}"
     expect(response).to have_http_status(:ok)
-    expect(json["title"]).to eq("awesome title")
-    expect(json["url"]).to eq('http://hello.com/bla?s=param')
-    expect(json["shortening"]).to eq("http://go.to/1")
+    expect(json.symbolize_keys).to include(attributes)
 
     # TODO: misc bad requests test
   end
@@ -62,84 +61,44 @@ describe "Bookmarks API" , type: :request do
   end
 
   it "searches correctly" do
-    # TODO: dry params
-    params1 = {
-      bookmark: {
-        url: "http://goodbye.com/bla?s=param",
-        title: "title",
-      }
-    }
+    create_list(:bookmark_with_bla_in_title, 10)
 
-    params2 = {
-      bookmark: {
-        url: "https://goodbye.com/wha",
-        title: "title",
-      }
-    }
-
-    params3 = {
-      bookmark: {
-        url: "https://different.com/wha",
-        title: "title",
-      }
-    }
-
-    post "/bookmarks", params: params1
-    post "/bookmarks", params: params2
-    post "/bookmarks", params: params3
-
-    get "/bookmarks/search?q=wha"
+    get "/bookmarks/search?q=bla"
     expect(response).to have_http_status(:ok)
     expect(json).to be_instance_of Array
-    expect(json.length).to eq(2)
+    expect(json.length).to eq(10)
 
-    get "/bookmarks/search?q=goodbye"
-    expect(response).to have_http_status(:ok)
-    expect(json).to be_instance_of Array
-    expect(json.length).to eq(2)
-
-    get "/bookmarks/search?q=.com"
-    expect(response).to have_http_status(:ok)
-    expect(json).to be_instance_of Array
-    expect(json.length).to eq(3)
-
-    get "/bookmarks/search?q=different"
-    expect(response).to have_http_status(:ok)
-    expect(json).to be_instance_of Array
-    expect(json.length).to eq(1)
-    expect(json[0]["url"]).to eq("https://different.com/wha")
-
-    get "/bookmarks/search?q=ohno"
+    get "/bookmarks/search?q=doesntexist"
     expect(response).to have_http_status(:ok)
     expect(json).to be_instance_of Array
     expect(json.length).to eq(0)
-
   end
 
   it "updates correctly" do
-    params = {
-      bookmark: {
-        url: "http://hello.com/bla?s=param",
-        shortening: "http://go.to/1",
-        title: "first title",
-      }
-    }
-    post "/bookmarks", params: params
-    expect(response).to have_http_status(:created)
+    bookmark = create(:bookmark)
+    id = bookmark.id
 
-    id = json["id"]
-    get "/bookmarks/#{id}"
-    expect(json["title"]).to eq("first title")
-
-    put "/bookmarks/#{id}", params: {bookmark: {title: "second title"}}
+    alternative_title = "second title"
+    put "/bookmarks/#{id}", params: {bookmark: {title: alternative_title}}
     expect(response).to have_http_status(:no_content)
 
     get "/bookmarks/#{id}"
-    expect(json["title"]).to eq("second title")
+    expect(json["title"]).to eq(alternative_title)
   end
 
   it "deletes correctly" do
-    #TODO...
+    bookmark = create(:bookmark)
+    delete "/bookmarks/#{bookmark.id}"
+    expect(response).to have_http_status(:no_content)
+    expect(Bookmark.find_by(id: bookmark.id)).to eq(nil)
+  end
+
+  it "rejects bad delete requests" do
+    delete "/bookmarks/-1"
+    expect(response).to have_http_status(:bad_request)
+
+    delete "/bookmarks/what"
+    expect(response).to have_http_status(:bad_request)
   end
 
   it "does not create the same URL twice" do

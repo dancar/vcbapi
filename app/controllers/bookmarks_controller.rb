@@ -9,6 +9,7 @@ class BookmarksController < ApplicationController
   end
 
   def show
+    return head :bad_request if not @bookmark
     json_response @bookmark
   end
 
@@ -19,6 +20,7 @@ class BookmarksController < ApplicationController
   end
 
   def update
+    return head :bad_request if not @bookmark
     params = bookmark_params
     @bookmark.update(params)
     head :no_content
@@ -30,6 +32,7 @@ class BookmarksController < ApplicationController
   end
 
   def destroy
+    return head :bad_request if not @bookmark
     @bookmark.destroy
     head :no_content
   end
