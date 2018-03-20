@@ -13,15 +13,27 @@ export function fetchBookmarks () {
   }
 }
 
+
 export function createBookmark({title, url, shortening}) {
   return async (dispatch, getState) => {
     try {
       const response = await ApiService.createBookmark({title, url, shortening})
-      console.log('<-DANDEBUG-> actions.js\\ 20: response:', response);
+      return await dispatch(fetchBookmarks())
 
     } catch (error) {
       console.error(error) // TODO: something else?
     }
+  }
+}
 
+export function deleteBookmark(id) {
+  return async (dispatch, getState) => {
+    try {
+      const response = await ApiService.deleteBookmark(id)
+      return await dispatch(fetchBookmarks())
+
+    } catch (error) {
+      console.error(error) // TODO: something else?
+    }
   }
 }

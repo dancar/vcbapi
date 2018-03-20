@@ -26,6 +26,11 @@ class BookmarksController < ApplicationController
     render json: Bookmark.all, status: :ok # TODO: pagination?
   end
 
+  def destroy
+    @bookmark.destroy
+    head :no_content
+  end
+
 
 
   private

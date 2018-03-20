@@ -1,7 +1,8 @@
 import React from 'react'
+import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 // import * as types from '../store/actionTypes'
-import { fetchBookmarks } from '../store/actions'
+import { fetchBookmarks, deleteBookmark } from '../store/actions'
 import './bookmarks_list.css'
 
 class BookmarksList extends React.Component {
@@ -36,6 +37,10 @@ class BookmarksList extends React.Component {
     return "No Bookmarks yet..."
   }
 
+  handleDelete (id) {
+    this.props.dispatch(deleteBookmark(id))
+  }
+
   renderBookmark(id, {title, url, shortening}) {
     return (
       <div key={id} className="bookmark-row">
@@ -53,6 +58,10 @@ class BookmarksList extends React.Component {
           <a href={shortening} target="_new">
           {shortening}
           </a>
+        </div>
+
+        <div>
+          <Button onClick={() => this.handleDelete(id)}>Delete</Button>
         </div>
 
       </div>
