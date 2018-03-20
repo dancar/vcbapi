@@ -43,7 +43,7 @@ class BookmarksController < ApplicationController
   end
 
   def bookmark_params
-    received_tag_names = request[:tags]
+    received_tag_names = request[:bookmark][:tags]
     tag_names = Set.new(
       (received_tag_names or [])
         .reject{|s| s.to_s != s || s.strip.blank?})

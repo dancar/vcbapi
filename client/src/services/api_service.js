@@ -15,7 +15,7 @@ class ApiService {
   }
 
   async updateBookmark (id, attributes) {
-    return await this._fetch(`/bookmarks/${id}`, attributes, "PUT")
+    return await this._fetch(`/bookmarks/${id}`, {bookmark: attributes}, "PUT")
   }
 
   async deleteBookmark (id) {

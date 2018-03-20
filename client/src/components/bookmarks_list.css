@@ -26,6 +26,7 @@
 
 .bookmarks-list .bookmark-row .tag {
   border: 1px solid black;
+  display: inline-block;
   margin-right: 1px;
   padding: 1px;
   background: whitesmoke;
