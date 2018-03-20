@@ -50,7 +50,7 @@ class BookmarksController < ApplicationController
     tag_names = Set.new(
       (received_tag_names or [])
         .reject{|s| s.to_s != s || s.strip.blank?})
-    tags = tag_names.map{|s| Tag.find_or_create_by(name: s.strip)}
+    tags = Set.new(tag_names.map{|s| Tag.find_or_create_by!(name: s.strip)}).to_a
     bookmark = params.require(:bookmark).permit(:title, :url, :shortening)
     ans = {tag: tags}.merge(bookmark)
     ans

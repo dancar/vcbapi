@@ -2,14 +2,12 @@ require 'rails_helper'
 
 describe "Bookmarks API - Tags" , type: :request do
   it "saves tags correctly" do
-    params = {
-      bookmark: {
-        url: "http://hello.com/bla?s=param",
-        shortening: "http://go.to/1",
-        title: "awesome title",
-        tags: " hello, world, world".split(",")
-      }
-    }
+    params = build(:bookmark_request_params)
+    params[:bookmark][:tags] = [
+      " hello",
+      "world",
+      "world "
+    ]
 
     post "/bookmarks", params: params
     expect(response).to have_http_status(:created)
@@ -22,15 +20,8 @@ describe "Bookmarks API - Tags" , type: :request do
   end
 
   it "ignores invalid tags" do
-    params = {
-      bookmark: {
-        url: "http://hello.com/bla?s=param",
-        shortening: "http://go.to/1",
-        title: "awesome title",
-        tags: ",hello, ,    ,,, world,,,,,".split(",")
-      }
-    }
-
+    params = build(:bookmark_request_params)
+    params[:bookmark][:tags] = ",hello, ,    ,,, world,,,,,".split(",")
     post "/bookmarks", params: params
     expect(response).to have_http_status(:created)
     id = json["id"]
@@ -40,16 +31,13 @@ describe "Bookmarks API - Tags" , type: :request do
     expect(tags.length).to eq(2)
     expect((tags - ["world", "hello"]).length).to eq(0)
   end
-  it "updates tags" do
-    params = {
-      bookmark: {
-        url: "http://hello.com/bla?s=param",
-        shortening: "http://go.to/1",
-        title: "awesome title",
-        tags: ["bla"]
-      }
-    }
 
+  it "updates tags" do
+    tag1 = "bla"
+    tag2 = "different_tag"
+
+    params = build(:bookmark_request_params)
+    params[:bookmark][:tags] = [tag1]
     post "/bookmarks", params: params
     expect(response).to have_http_status(:created)
     id = json["id"]
@@ -57,17 +45,9 @@ describe "Bookmarks API - Tags" , type: :request do
     expect(response).to have_http_status(:ok)
     tags = json["tags"]
     expect(tags.length).to eq(1)
-    expect(tags[0]).to eq("bla")
+    expect(tags[0]).to eq(tag1)
 
-    params = {
-      bookmark: {
-        url: "http://hello.com/bla?s=param",
-        shortening: "http://go.to/1",
-        title: "awesome title",
-        tags: ["different"]
-      }
-    }
-
+    params[:bookmark][:tags] = [tag2]
     put "/bookmarks/#{id}", params: params
     expect(response).to have_http_status(:no_content)
 
@@ -75,6 +55,6 @@ describe "Bookmarks API - Tags" , type: :request do
     expect(response).to have_http_status(:ok)
     tags = json["tags"]
     expect(tags.length).to eq(1)
-    expect(tags[0]).to eq("different")
+    expect(tags[0]).to eq(tag2)
   end
 end
