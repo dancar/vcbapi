@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319174144) do
+ActiveRecord::Schema.define(version: 20180320143526) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.string "url"
@@ -23,11 +23,25 @@ ActiveRecord::Schema.define(version: 20180319174144) do
     t.index ["url"], name: "index_bookmarks_on_url", unique: true
   end
 
+  create_table "bookmarks_tags", id: false, force: :cascade do |t|
+    t.integer "bookmark_id", null: false
+    t.integer "tag_id", null: false
+    t.index ["bookmark_id", "tag_id"], name: "index_bookmarks_tags_on_bookmark_id_and_tag_id"
+    t.index ["tag_id", "bookmark_id"], name: "index_bookmarks_tags_on_tag_id_and_bookmark_id"
+  end
+
   create_table "sites", force: :cascade do |t|
     t.string "hostname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hostname"], name: "index_sites_on_hostname", unique: true
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
 end

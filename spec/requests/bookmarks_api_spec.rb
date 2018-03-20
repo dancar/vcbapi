@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-
 describe "Bookmarks API" , type: :request do
   it "can create and retrieve a bookmark" do
     params = {

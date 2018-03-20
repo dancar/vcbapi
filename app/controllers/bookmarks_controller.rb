@@ -3,7 +3,11 @@ class BookmarksController < ApplicationController
   before_action :set_bookmark_item, only: [:show, :update, :destroy]
 
   def create
-    @bookmark = Bookmark.create!(bookmark_params)
+    tags = Tag.from_str(request[:bookmark][:tags])
+    params = bookmark_params
+    params[:tag] = tags
+    @bookmark = Bookmark.create!(params)
+
     json_response @bookmark, :created
   end
 

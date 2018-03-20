@@ -1,4 +1,5 @@
 class Bookmark < ApplicationRecord
+  has_and_belongs_to_many :tag
   belongs_to :site
   before_validation :register_site
   validates :url, url: true
@@ -6,7 +7,15 @@ class Bookmark < ApplicationRecord
   validates :title, {length: {minimum: 1}}
   validates :site, presence: true
 
+  def as_json(opts = {})
+    ans = super(opts)
+    ans["tags"] = self.tag.map(&:name)
+    ans
+  end
+
+
   private
+
   def register_site
     # TODO: maybe check if site should be removed (in case validation failed)
     uri = URI(self.url)

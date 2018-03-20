@@ -1,6 +1,12 @@
 import React from 'react'
 import { FormControl, FormGroup, Button, ButtonGroup } from 'react-bootstrap'
 
+const DISPLAY_NAMES = {
+  title: "Title",
+  url: "http://www.example.com/path?q=something",
+  shortening: "http://bit.ly/eXamPle"
+}
+
 export default class BookmarkListItem extends React.Component {
   constructor (props) {
     super(props)
@@ -76,7 +82,7 @@ export default class BookmarkListItem extends React.Component {
             cursor: "default", background: "none", border: "none", boxShadow: "none"
           }
     const value = this.state.attributes[name]
-    const displayName = editable && name[0].toUpperCase() + name.substring(1)
+    const displayName = DISPLAY_NAMES[name]
     let control = (
         <FormControl
           style={style}
