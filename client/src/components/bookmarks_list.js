@@ -15,22 +15,22 @@ class BookmarksList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(fetchBookmarks())
+    this.props.fetchBookmarks()
   }
 
 
   handleDelete (id) {
-    this.props.dispatch(deleteBookmark(id))
+    this.props.deleteBookmark(id)
   }
 
   handleCreate (attributes) {
-    this.props.dispatch(createBookmark(attributes))
+    this.props.createBookmark(attributes)
   }
 
 
   createSaveHandler (id) {
     return (attributes) => {
-      this.props.dispatch(updateBookmark(id, attributes))
+      this.props.updateBookmark(id, attributes)
       this.setState({
         editable: null
       })
@@ -75,8 +75,14 @@ class BookmarksList extends React.Component {
 
 function mapStateToProps(state) {
   const bookmarks = state.bookmarks
-
   return {bookmarks}
 }
 
-export default connect(mapStateToProps)(BookmarksList)
+const mapDispatchToProps = (dispatch) => ({
+  deleteBookmark: (id) => dispatch(deleteBookmark(id)),
+  createBookmark: (attributes) => dispatch(createBookmark(attributes)),
+  updateBookmark: (id, attributes) => dispatch(updateBookmark(id, attributes)),
+  fetchBookmarks: () => dispatch(fetchBookmarks())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookmarksList)

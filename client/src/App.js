@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BookmarkCreateForm from './containers/bookmark_create_form'
-import BookmarkList from './containers/bookmarks_list'
+import BookmarkListContainer from './containers/bookmarks_list_container'
+import Search from './containers/search'
 import './App.css';
 
 class App extends Component {
@@ -8,7 +9,8 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Bookmarks</h1>
-        <BookmarkList/>
+        <Search/>
+        <BookmarkListContainer/>
       </div>
     );
   }
