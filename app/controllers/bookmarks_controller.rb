@@ -1,3 +1,4 @@
+MAX_INDEX_LIMIT = 100
 class BookmarksController < ApplicationController
   before_action :set_bookmark_item, only: [:show, :update, :destroy]
 
@@ -23,7 +24,7 @@ class BookmarksController < ApplicationController
 
   def index
     # TODO: pagination?
-    json_response Bookmark.all
+    json_response Bookmark.limit(MAX_INDEX_LIMIT)
   end
 
   def destroy

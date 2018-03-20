@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20180319174144) do
     t.string "hostname"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["hostname"], name: "index_sites_on_hostname", unique: true
   end
 
 end

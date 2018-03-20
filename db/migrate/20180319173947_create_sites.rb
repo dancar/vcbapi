@@ -5,5 +5,6 @@ class CreateSites < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    add_index :sites, :hostname, unique: true
   end
 end
