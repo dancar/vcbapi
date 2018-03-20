@@ -2,7 +2,6 @@ FactoryBot.define do
   factory :bookmark do
     url
     title "bookmark-title"
-
   end
 
   factory :bookmark_with_bla_in_title, parent: :bookmark do
@@ -13,6 +12,10 @@ FactoryBot.define do
     "http://www.google.com/#{n}"
   end
 
+  sequence :url2 do |n|
+    "http://coca-cola.com/#{n}"
+  end
+
   sequence :title_with_bla do |n|
     "Title with bla #{n}"
   end
@@ -21,5 +24,14 @@ FactoryBot.define do
     url
     title "Nice Title"
     initialize_with { {bookmark: attributes} }
+
+  end
+
+  factory :bookmark_params_with_different_site, parent: :bookmark_request_params do
+      url { generate :url2 }
+  end
+
+  factory :bookmark_params_with_different_title, parent: :bookmark_request_params do
+      title "much title"
   end
 end

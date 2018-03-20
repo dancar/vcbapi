@@ -25,26 +25,10 @@ describe "Bookmarks API" , type: :request do
   end
 
   it "creates the same Site for similar bookmarks" do
-    params1 = {
-      bookmark: {
-        url: "https://goodbye.com/bla?s=param",
-        title: "title",
-      }
-    }
-
-    params2 = {
-      bookmark: {
-        url: "https://goodbye.com/wha",
-        title: "title",
-      }
-    }
-
-    params3 = {
-      bookmark: {
-        url: "https://different.com/wha",
-        title: "title",
-      }
-    }
+    params1 = build(:bookmark_request_params)
+    params2 = build(:bookmark_request_params)
+    params3 = build(:bookmark_params_with_different_site)
+    params4 = build(:bookmark_params_with_different_site)
 
     post "/bookmarks", params: params1
     expect(response).to have_http_status(:created)
@@ -57,7 +41,12 @@ describe "Bookmarks API" , type: :request do
 
     post "/bookmarks", params: params3
     expect(response).to have_http_status(:created)
-    expect(json["site_id"]).not_to eq(site_id)
+    site2_id = json["site_id"]
+    expect(site2_id).not_to eq(site_id)
+
+    post "/bookmarks", params: params4
+    expect(response).to have_http_status(:created)
+    expect(json["site_id"]).to eq(site2_id)
   end
 
   it "searches correctly" do
@@ -102,21 +91,9 @@ describe "Bookmarks API" , type: :request do
   end
 
   it "does not create the same URL twice" do
-    params1 = {
-      bookmark: {
-        url: "http://hello.com",
-        shortening: "http://go.to/1",
-        title: "first title",
-      }
-    }
-
-    params2 = {
-      bookmark: {
-        url: "http://hello.com",
-        shortening: "http://go.to/1",
-        title: "first title",
-      }
-    }
+    params1 = build(:bookmark_request_params)
+    params2 = build(:bookmark_params_with_different_title)
+    params2[:bookmark][:url] = params1[:bookmark][:url]
 
     post "/bookmarks", params: params1
     expect(response).to have_http_status(:created)
