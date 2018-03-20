@@ -4,6 +4,11 @@ class ApiService {
     return await response.json()
   }
 
+  async searchBookmarks (query) {
+    const response = await this._fetch('/bookmarks/search?q=' + encodeURI(query))
+    return await response.json()
+  }
+
   async createBookmark ({title, url, shortening}) {
     const response = await this._fetch('/bookmarks', {bookmark: {title, url, shortening}}, "POST")
     return response.json()

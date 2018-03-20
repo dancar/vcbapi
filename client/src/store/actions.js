@@ -1,6 +1,19 @@
 import ApiService from '../services/api_service'
 import * as types from './actionTypes'
 
+export function searchBookmarks (query) {
+  return async (dispatch, getState) => {
+    try {
+      const bookmarks = await ApiService.searchBookmarks(query)
+      dispatch({ type: types.BOOKMARKS_FETCHED, bookmarks })
+
+    } catch (error) {
+      console.error(error) // TODO: something else?
+    }
+  }
+}
+
+
 export function fetchBookmarks () {
   return async (dispatch, getState) => {
     try {

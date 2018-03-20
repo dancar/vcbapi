@@ -5,6 +5,12 @@
   text-align: center;
 }
 
+.bookmarks-list .bookmark-row.bookmark-row-header > div{
+  background: whitesmoke;
+  text-align: center;
+  font-weight: bolder;
+}
+
 .bookmarks-list .bookmark-row {
   display: table-row;
 }

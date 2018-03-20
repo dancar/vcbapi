@@ -44,6 +44,11 @@ class BookmarksList extends React.Component {
 
     return (
       <div className="bookmarks-list">
+        <div className="bookmark-row bookmark-row-header">
+          <div>Title</div>
+          <div>URL</div>
+          <div>Shortening</div>
+        </div>
         <BookmarkListItem
           creator
           onCreate={this.handleCreate.bind(this)}

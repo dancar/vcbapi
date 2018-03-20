@@ -8,15 +8,16 @@ export default class Search extends React.Component {
     }
   }
 
-  handleSearch () {
-    this.props.onSearch(this.state.query)
+  handleSearch (e) {
+    e.preventDefault()
+    this.props.searchBookmarks(this.state.query)
   }
 
   handleReset () {
     this.setState({
       query: ""
     })
-    this.props.handleReset()
+    this.props.fetchBookmarks()
   }
 
   render () {
@@ -31,7 +32,7 @@ export default class Search extends React.Component {
             />
         </FormGroup>{' '}
         <Button onClick={this.handleSearch.bind(this)} type="submit">Search</Button>{' '}
-        <Button >Reset</Button>
+        <Button onClick={this.handleReset.bind(this)}>Reset</Button>
       </Form>
     )
   }
