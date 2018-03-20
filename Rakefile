@@ -4,3 +4,7 @@
 require_relative 'config/application'
 
 Rails.application.load_tasks
+
+task :build_client do
+  sh "cd client && npm i && npm run build"
+end

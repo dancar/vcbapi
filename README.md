@@ -1,24 +1,20 @@
-# README
+# VCBAPI
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Prerequisites
 
-Things you may want to cover:
+- ruby 2.5.0
+- node v8.9.4
+- sqlite3
 
-* Ruby version
+## Setup
 
-* System dependencies
+```
+bundle install
+rake build_client
+bundle exec rails db:migrate
 
-* Configuration
+```
 
-* Database creation
+## Run
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+`bundle exec rails s`
