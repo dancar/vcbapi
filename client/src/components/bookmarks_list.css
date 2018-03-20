@@ -23,3 +23,10 @@
   border: 1px solid gray;
   text-align: left;
 }
+
+.bookmarks-list .bookmark-row .tag {
+  border: 1px solid black;
+  margin-right: 1px;
+  padding: 1px;
+  background: whitesmoke;
+}

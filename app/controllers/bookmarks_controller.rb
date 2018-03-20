@@ -3,11 +3,8 @@ class BookmarksController < ApplicationController
   before_action :set_bookmark_item, only: [:show, :update, :destroy]
 
   def create
-    tags = Tag.from_str(request[:bookmark][:tags])
     params = bookmark_params
-    params[:tag] = tags
     @bookmark = Bookmark.create!(params)
-
     json_response @bookmark, :created
   end
 
@@ -22,7 +19,8 @@ class BookmarksController < ApplicationController
   end
 
   def update
-    @bookmark.update(bookmark_params)
+    params = bookmark_params
+    @bookmark.update(params)
     head :no_content
   end
 
@@ -45,7 +43,14 @@ class BookmarksController < ApplicationController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:title, :url, :shortening)
+    received_tag_names = request[:tags]
+    tag_names = Set.new(
+      (received_tag_names or [])
+        .reject{|s| s.to_s != s || s.strip.blank?})
+    tags = tag_names.map{|s| Tag.find_or_create_by(name: s.strip)}
+    bookmark = params.require(:bookmark).permit(:title, :url, :shortening)
+    ans = {tag: tags}.merge(bookmark)
+    ans
   end
 
 end

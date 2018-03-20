@@ -48,6 +48,7 @@ class BookmarksList extends React.Component {
           <div>Title</div>
           <div>URL</div>
           <div>Shortening</div>
+          <div>Tags</div>
         </div>
         <BookmarkListItem
           creator

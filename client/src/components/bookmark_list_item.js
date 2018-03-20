@@ -4,7 +4,8 @@ import { FormControl, FormGroup, Button, ButtonGroup } from 'react-bootstrap'
 const DISPLAY_NAMES = {
   title: "Title",
   url: "http://www.example.com/path?q=something",
-  shortening: "http://bit.ly/eXamPle"
+  shortening: "http://bit.ly/eXamPle",
+  tags: "comma separated"
 }
 
 export default class BookmarkListItem extends React.Component {
@@ -13,7 +14,8 @@ export default class BookmarkListItem extends React.Component {
     const attributes = Object.assign({
       title: "",
       url: "",
-      shortening: ""
+      shortening: "",
+      tags: []
     }, this.props.initialAttributes)
     this.state = {attributes}
   }
@@ -49,11 +51,15 @@ export default class BookmarkListItem extends React.Component {
   }
 
   handleChange (e) {
+    let value = e.target.value
+    if (e.target.name === "tags") {
+      value = value.split(",")
+    }
     this.setState({
       attributes: Object.assign(
         {}, this.state.attributes,
         {
-          [e.target.name]: e.target.value
+          [e.target.name]: value
         })
     })
   }
@@ -81,7 +87,7 @@ export default class BookmarkListItem extends React.Component {
           : {
             cursor: "default", background: "none", border: "none", boxShadow: "none"
           }
-    const value = this.state.attributes[name]
+    let value = this.state.attributes[name]
     const displayName = DISPLAY_NAMES[name]
     let control = (
         <FormControl
@@ -147,12 +153,28 @@ export default class BookmarkListItem extends React.Component {
     )
   }
 
+  renderTags () {
+    const tags = this.state.attributes.tags
+    return (
+      <div>
+        {tags.map(this.renderTag.bind(this))}
+      </div>
+    )
+  }
+
+  renderTag (name) {
+    return (
+      <span key={name} className="tag">{name}</span>
+    )
+  }
+
   render () {
     return (
       <form className="bookmark-row">
           {this.textAttribute("title")}
           {this.textAttribute("url", true)}
           {this.textAttribute("shortening", true)}
+          {this.props.editable || this.props.creator ? this.textAttribute("tags", true) : this.renderTags()}
           <div>
             {this.renderButtons() }
           </div>

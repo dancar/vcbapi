@@ -9,8 +9,8 @@ class ApiService {
     return await response.json()
   }
 
-  async createBookmark ({title, url, shortening}) {
-    const response = await this._fetch('/bookmarks', {bookmark: {title, url, shortening}}, "POST")
+  async createBookmark (attributes) {
+    const response = await this._fetch('/bookmarks', {bookmark: attributes}, "POST")
     return response.json()
   }
 

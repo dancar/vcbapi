@@ -27,10 +27,10 @@ export function fetchBookmarks () {
 }
 
 
-export function createBookmark({title, url, shortening}) {
+export function createBookmark(attributes) {
   return async (dispatch, getState) => {
     try {
-      const response = await ApiService.createBookmark({title, url, shortening})
+      const response = await ApiService.createBookmark(attributes)
       return await dispatch(fetchBookmarks())
 
     } catch (error) {

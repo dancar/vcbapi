@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import BookmarkCreateForm from './containers/bookmark_create_form'
 import BookmarkListContainer from './containers/bookmarks_list_container'
 import SearchContainer from './containers/search_container'
 import './App.css';
