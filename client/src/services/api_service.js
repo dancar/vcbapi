@@ -1,29 +1,23 @@
-const TEMP = [
-  {
-    id: 0 ,
-    title: "hello",
-    url: "http://hello.com",
-    shortening: "bit.ly/h"
-  },
-
-  {
-    id: 1,
-    title: "world",
-    url: "http://world.com",
-    shortening: "bit.ly/w"
-  },
-
-  {
-    id: 2,
-    title: "earth",
-    url: "http://earth.com",
-    shortening: null
-  }
-]
-
 class ApiService {
   async fetchBookmarks () {
-    return TEMP //TODO something else probably
+    return await this._fetch('/bookmarks')
+  }
+
+  async createBookmark ({title, url, shortening}) {
+    return await this._fetch('/bookmarks', {bookmark: {title, url, shortening}}, "POST")
+  }
+
+  async _fetch (path, payload = null, method = "GET") {
+    const body = payload ? JSON.stringify(payload) : undefined
+    const response = await fetch(path, {
+      method,
+      body,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    const response_body = await response.json()
+    return response_body
   }
 }
 

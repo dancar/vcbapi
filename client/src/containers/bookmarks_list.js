@@ -12,15 +12,28 @@ class BookmarksList extends React.Component {
 
   render () {
     if (!this.props.bookmarks) {
-      return "Loading..." // TODO: something nicer
+      return this.renderLoading()
+    }
+
+    if (Object.keys(this.props.bookmarks).length === 0) {
+      return this.renderEmpty()
     }
 
     return (
       <div className="bookmarks-list">
-        <h1>Bookmarks:</h1>
         { Object.keys(this.props.bookmarks).map((id) => this.renderBookmark(id, this.props.bookmarks[id])) }
       </div>
     )
+  }
+
+  renderLoading () {
+    console.log('<-DANDEBUG-> bookmarks_list.js\\ 31: <here>');
+    return "Loading..." // TODO: something else?
+  }
+
+  renderEmpty () {
+    console.log('<-DANDEBUG-> bookmarks_list.js\\ 35: <here>');
+    return "No Bookmarks yet..."
   }
 
   renderBookmark(id, {title, url, shortening}) {

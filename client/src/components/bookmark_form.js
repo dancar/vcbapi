@@ -14,7 +14,9 @@ export default class BookmarkForm extends React.Component {
   }
 
   handleSubmit () {
-
+    const { title, url, shortening } = this.state
+    const attributes = {title, url, shortening}
+    this.props.onSubmit(attributes)
   }
 
   handleChange (e) {
@@ -39,7 +41,7 @@ export default class BookmarkForm extends React.Component {
           <FormControl type="text" id="shortening" onChange={this.handleChange.bind(this)} name="shortening" value={this.state.shortening}/>
         </div>
 
-        <Button onClick={this.handleSubmit.bind(this)} bsStyle="primary">Create</Button>
+        <Button onClick={this.handleSubmit.bind(this)} bsStyle="primary">Submit</Button>
 
       </form>
     )
