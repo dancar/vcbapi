@@ -3,6 +3,7 @@ class Bookmark < ApplicationRecord
   before_validation :register_site
   validates :url, url: true
   validates :shortening, url: {allow_blank: true, allow_nil: true}
+  validates :title, {length: {minimum: 1}}
   validates :site, presence: true
 
   private
