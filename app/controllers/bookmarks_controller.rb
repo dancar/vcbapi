@@ -17,7 +17,6 @@ class BookmarksController < ApplicationController
   end
 
   def update
-    puts('<-DANDEBUG-> bookmarks_controller.rb\\ 20: params.inspect:', params.inspect)
     @bookmark.update(bookmark_params)
     head :no_content
   end

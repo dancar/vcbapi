@@ -9,8 +9,6 @@ class App extends Component {
       <div className="App">
         <h1>Bookmarks</h1>
         <BookmarkList/>
-        <hr/>
-        <BookmarkCreateForm/>
       </div>
     );
   }

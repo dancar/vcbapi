@@ -1,14 +1,40 @@
 import React from 'react'
-import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 // import * as types from '../store/actionTypes'
-import { fetchBookmarks, deleteBookmark } from '../store/actions'
+import { fetchBookmarks, deleteBookmark, createBookmark, updateBookmark} from '../store/actions'
 import './bookmarks_list.css'
+import  BookmarkListItem  from '../components/bookmark_list_item'
 
 class BookmarksList extends React.Component {
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      editable: null
+    }
+  }
+
   componentDidMount() {
     this.props.dispatch(fetchBookmarks())
+  }
+
+
+  handleDelete (id) {
+    this.props.dispatch(deleteBookmark(id))
+  }
+
+  handleCreate (attributes) {
+    this.props.dispatch(createBookmark(attributes))
+  }
+
+
+  createSaveHandler (id) {
+    return (attributes) => {
+      this.props.dispatch(updateBookmark(id, attributes))
+      this.setState({
+        editable: null
+      })
+    }
   }
 
   render () {
@@ -16,57 +42,37 @@ class BookmarksList extends React.Component {
       return this.renderLoading()
     }
 
-    if (Object.keys(this.props.bookmarks).length === 0) {
-      return this.renderEmpty()
-    }
-
     return (
       <div className="bookmarks-list">
+        <BookmarkListItem
+          creator
+          onSubmit={this.handleCreate.bind(this)}
+          />
         { Object.keys(this.props.bookmarks).map((id) => this.renderBookmark(id, this.props.bookmarks[id])) }
       </div>
     )
   }
 
   renderLoading () {
-    console.log('<-DANDEBUG-> bookmarks_list.js\\ 31: <here>');
     return "Loading..." // TODO: something else?
-  }
-
-  renderEmpty () {
-    console.log('<-DANDEBUG-> bookmarks_list.js\\ 35: <here>');
-    return "No Bookmarks yet..."
-  }
-
-  handleDelete (id) {
-    this.props.dispatch(deleteBookmark(id))
   }
 
   renderBookmark(id, {title, url, shortening}) {
     return (
-      <div key={id} className="bookmark-row">
-        <div>
-          {title}
-        </div>
-
-        <div>
-          <a href={url} target="_new">
-            {url}
-          </a>
-        </div>
-
-        <div>
-          <a href={shortening} target="_new">
-          {shortening}
-          </a>
-        </div>
-
-        <div>
-          <Button onClick={() => this.handleDelete(id)}>Delete</Button>
-        </div>
-
-      </div>
+      <BookmarkListItem
+        key={id}
+        id={id}
+        title={title}
+        url={url}
+        shortening={shortening}
+        onCancelEdit={() => this.setState({editable: null})}
+        onEdit={() => this.setState({editable: id})}
+        onDelete={() => this.handleDelete(id)}
+        onSubmit={this.createSaveHandler(id)}
+        editable={this.state.editable === id}/>
     )
   }
+
 }
 
 function mapStateToProps(state) {

@@ -37,3 +37,15 @@ export function deleteBookmark(id) {
     }
   }
 }
+
+export function updateBookmark(id, attributes) {
+  return async (dispatch, getState) => {
+    try {
+      const response = await ApiService.updateBookmark(id, attributes)
+      return await dispatch(fetchBookmarks())
+
+    } catch (error) {
+      console.error(error) // TODO: something else?
+    }
+  }
+}
