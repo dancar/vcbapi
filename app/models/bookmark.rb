@@ -5,12 +5,13 @@ class Bookmark < ApplicationRecord
   belongs_to :site
   before_validation :register_site
   before_validation :shorten_url
+  after_destroy :check_site
   validates :url, url: true
   validates :shortening, url: {allow_blank: true, allow_nil: true}
   validates :title, {length: {minimum: 1}}
   validates :site, presence: true
 
-  def as_json(opts = {})
+  def as_json(opts = {includes: :tag})
     ans = super(opts)
     ans["tags"] = self.tag.map(&:name)
     ans
@@ -32,4 +33,9 @@ class Bookmark < ApplicationRecord
       #TODO handle error?
     end
   end
+
+  def check_site
+    self.site.destroy if self.site.bookmark.blank?
+  end
+
 end

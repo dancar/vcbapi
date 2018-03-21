@@ -4,8 +4,8 @@ import { fetchBookmarks, deleteBookmark, createBookmark, updateBookmark} from '.
 import BookmarksList  from '../components/bookmarks_list'
 
 function mapStateToProps(state) {
-  const bookmarks = state.bookmarks
-  return {bookmarks}
+  const sites = state.bookmarks
+  return {sites}
 }
 
 const mapDispatchToProps = (dispatch) => ({

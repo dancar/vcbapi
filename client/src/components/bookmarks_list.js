@@ -38,7 +38,7 @@ class BookmarksList extends React.Component {
   }
 
   render () {
-    if (!this.props.bookmarks) {
+    if (!this.props.sites) {
       return this.renderLoading()
     }
 
@@ -54,16 +54,30 @@ class BookmarksList extends React.Component {
           creator
           onCreate={this.handleCreate.bind(this)}
           />
-        { Object.keys(this.props.bookmarks).map((id) => this.renderBookmark(id, this.props.bookmarks[id])) }
+        {Object.keys(this.props.sites).map((id) => this.renderSite(id, this.props.sites[id])) }
       </div>
     )
+        // { Object.keys(this.props.sites).map((id) => this.renderBookmark(id, this.props.bookmarks[id])) }
   }
 
   renderLoading () {
     return "Loading..." // TODO: something else?
   }
 
-  renderBookmark(id, attributes) {
+  renderSite (id, site) {
+    console.log('<-DANDEBUG-> bookmarks_list.js\\ 68: site:', site);
+    return [(
+      <div className="site" >
+        <div>
+          <div>
+          {site.hostname}
+          </div>
+        </div>
+      </div>)].concat(site.bookmark.map(this.renderBookmark.bind(this)))
+
+  }
+  renderBookmark(attributes) {
+    const id = attributes.id
     return (
       <BookmarkListItem
         key={id}

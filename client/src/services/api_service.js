@@ -1,7 +1,9 @@
 class ApiService {
+
   async fetchBookmarks () {
     const response = await this._fetch('/bookmarks')
-    return await response.json()
+    const sites = await response.json()
+    return this._prepareSites(sites)
   }
 
   async searchBookmarks (query) {
@@ -32,6 +34,15 @@ class ApiService {
         "Content-Type": "application/json"
       }
     })
+  }
+
+  _prepareSites (sites) {
+    sites.forEach((site) => {
+      site.bookmark.forEach( (bookmark) => {
+        bookmark.tags = bookmark.tag.map( tag => tag.name )
+      })
+    })
+    return sites
   }
 }
 

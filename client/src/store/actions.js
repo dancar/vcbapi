@@ -17,8 +17,9 @@ export function searchBookmarks (query) {
 export function fetchBookmarks () {
   return async (dispatch, getState) => {
     try {
-      const bookmarks = await ApiService.fetchBookmarks()
-      dispatch({ type: types.BOOKMARKS_FETCHED, bookmarks })
+      // bookmarks are grouped by sites
+      const sites = await ApiService.fetchBookmarks()
+      dispatch({ type: types.BOOKMARKS_FETCHED, sites })
 
     } catch (error) {
       console.error(error) // TODO: something else?

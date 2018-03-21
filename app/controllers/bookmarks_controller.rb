@@ -28,7 +28,8 @@ class BookmarksController < ApplicationController
 
   def index
     # TODO: pagination?
-    json_response Bookmark.limit(MAX_INDEX_LIMIT)
+    sites_json = Site.includes(bookmark: :tag).limit(MAX_INDEX_LIMIT).to_json(:include => { bookmark: { :include => :tag}})
+    json_response sites_json
   end
 
   def destroy

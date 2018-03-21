@@ -31,3 +31,20 @@
   padding: 1px;
   background: whitesmoke;
 }
+
+.bookmarks-list .site {
+  display: table-row;
+}
+.bookmarks-list .site > div {
+  display: table-cell;
+}
+
+.bookmarks-list .site > div > div {
+  border: 1px solid gray;
+  border-width: 1px 1px 0px 1px;
+  margin-top: 5px;
+  background: gray;
+  color: whitesmoke;
+  overflow: visible;
+  display: block;
+}
