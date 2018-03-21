@@ -7,10 +7,10 @@ class Bookmark < ApplicationRecord
   before_validation :register_site
   before_validation :shorten_url
   after_destroy :check_site
+  validates :site, presence: true
   validates :url, url: true
   validates :shortening, url: {allow_blank: true, allow_nil: true}
   validates :title, {length: {minimum: 1}}
-  validates :site, presence: true
   DEFAULT_SCHEME = "http://"
 
   def as_json(opts = {includes: :tag})
@@ -25,6 +25,8 @@ class Bookmark < ApplicationRecord
     uri = URI(self.url)
     ans = DEFAULT_SCHEME + ans if uri.scheme.blank?
     ans
+  rescue
+    url
   end
 
   def add_schemes
@@ -35,7 +37,7 @@ class Bookmark < ApplicationRecord
   def register_site
     # TODO: maybe check if site should be removed (in case validation failed)
     uri = URI(self.url)
-    self.site = Site.find_or_create_by(hostname: uri.host) # TODO: handle race condition?
+    self.site = Site.find_or_create_by(hostname: uri.host) if uri.host # TODO: also handle race condition?
   rescue URI::InvalidURIError
     self.site_id = nil # Will be handled by validation
   end

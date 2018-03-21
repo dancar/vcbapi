@@ -1,7 +1,6 @@
 require 'rails_helper'
 VALID_SHORTENING = "http://google.com"
 BAD_URLS = [
-  'no.protocol.com',
   '/no.protocol.com',
   '//no.protocol.com',
   '://no.protocol.com',
