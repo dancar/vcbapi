@@ -77,6 +77,7 @@ export default class BookmarkListItem extends React.Component {
     const attributes = {}
     Object.keys(this.state.attributes).forEach(
       name => attributes[name] = "" )
+    attributes.tags = []
     this.setState({attributes})
   }
 

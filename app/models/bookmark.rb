@@ -1,7 +1,10 @@
+require './lib/url_shortener'
+
 class Bookmark < ApplicationRecord
   has_and_belongs_to_many :tag
   belongs_to :site
   before_validation :register_site
+  before_validation :shorten_url
   validates :url, url: true
   validates :shortening, url: {allow_blank: true, allow_nil: true}
   validates :title, {length: {minimum: 1}}
@@ -12,8 +15,6 @@ class Bookmark < ApplicationRecord
     ans["tags"] = self.tag.map(&:name)
     ans
   end
-
-
   private
 
   def register_site
@@ -23,5 +24,12 @@ class Bookmark < ApplicationRecord
   rescue URI::InvalidURIError
     self.site_id = nil # Will be handled by validation
     return
+  end
+
+  def shorten_url
+    if self.shortening.blank?
+      self.shortening = URLShortener.shorten(self.url)
+      #TODO handle error?
+    end
   end
 end
