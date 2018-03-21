@@ -45,6 +45,6 @@
   margin-top: 5px;
   background: gray;
   color: whitesmoke;
-  overflow: visible;
+  overflow: hidden;
   display: block;
 }

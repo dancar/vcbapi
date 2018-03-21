@@ -22,7 +22,9 @@ class BookmarksController < ApplicationController
   def update
     return head :bad_request if not @bookmark
     params = bookmark_params
+    site = @bookmark.site
     @bookmark.update(params)
+    site.destroy if site.bookmark.blank?
     head :no_content
   end
 

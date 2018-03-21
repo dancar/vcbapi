@@ -27,13 +27,20 @@ class ApiService {
   async _fetch (path, payload = null, method = "GET") {
     const body = payload ? JSON.stringify(payload) : undefined
     // TODO: handle errors here?
-    return await fetch(path, {
+    const response =  await fetch(path, {
       method,
       body,
       headers: {
         "Content-Type": "application/json"
       }
     })
+    if (response.status  === 409 ) {
+      window.alert("URL Already exists")
+      return this.fetchBookmarks()
+    }
+    else {
+      return response
+    }
   }
 
   _prepareSites (sites) {
