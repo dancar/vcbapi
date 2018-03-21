@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :bookmark do
     url
     title "bookmark-title"
+    shortening "http://not.to.short.com"
   end
 
   factory :bookmark_with_bla_in_title, parent: :bookmark do
@@ -23,6 +24,7 @@ FactoryBot.define do
   factory :bookmark_request_params, class: Hash do
     url
     title "Nice Title"
+    shortening "http://shortening.com"
     initialize_with { {bookmark: attributes} }
 
   end
