@@ -65,7 +65,6 @@ class BookmarksList extends React.Component {
   }
 
   renderSite (id, site) {
-    console.log('<-DANDEBUG-> bookmarks_list.js\\ 68: site:', site);
     return [(
       <div className="site" >
         <div>

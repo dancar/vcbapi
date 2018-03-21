@@ -15,8 +15,12 @@ class BookmarksController < ApplicationController
 
   def search
     query = params[:q] # TODO: check query?
-    @bookmarks = Bookmark.where("url LIKE :search OR title LIKE :search OR shortening LIKE :search", search: "%#{query}%")
-    json_response @bookmarks
+    bookmarks = Bookmark
+      .includes([:site, :tag])
+      .where("url LIKE :search OR title LIKE :search OR shortening LIKE :search", search: "%#{query}%")
+      .limit(MAX_INDEX_LIMIT)
+      .to_json(:include => [:tag, :site])
+    json_response bookmarks
   end
 
   def update
@@ -30,7 +34,11 @@ class BookmarksController < ApplicationController
 
   def index
     # TODO: pagination?
-    sites_json = Site.includes(bookmark: :tag).limit(MAX_INDEX_LIMIT).to_json(:include => { bookmark: { :include => :tag}})
+    sites_json = Site
+                   .includes(bookmark: :tag)
+                   .limit(MAX_INDEX_LIMIT)
+                   .to_json(:include =>
+                            { bookmark: { :include => :tag}})
     json_response sites_json
   end
 

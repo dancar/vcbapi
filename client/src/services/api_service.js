@@ -8,7 +8,20 @@ class ApiService {
 
   async searchBookmarks (query) {
     const response = await this._fetch('/bookmarks/search?q=' + encodeURI(query))
-    return await response.json()
+    const bookmarks =  await response.json()
+    // Convert from bookmarks-based list to site-based:
+    const sites = {}
+    bookmarks.forEach( (bookmark) => {
+      if (sites[bookmark.site.id] === undefined) {
+        sites[bookmark.site.id] = bookmark.site
+      }
+      const site = sites[bookmark.site.id]
+      if (site.bookmark === undefined) {
+        site.bookmark = []
+      }
+      site.bookmark.push(bookmark)
+    })
+    return Object.keys(sites).map(k => sites[k])
   }
 
   async createBookmark (attributes) {
